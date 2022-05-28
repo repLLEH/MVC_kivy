@@ -1,0 +1,1102 @@
+#:import Factory kivy.factory.Factory
+#:import Window kivy.core.window
+
+<MyField@MDTextField>
+    size_hint_x: None
+    width: '200'
+    text_color: "000000"
+
+    required: True
+    helper_text: "This field is required"
+    helper_text_mode: "on_error"
+
+    color_mode: 'custom'
+    line_color_focus: 'c06ef0'
+
+    multiline: False
+    background_color: (1, 1, 1)
+    background_normal:''
+
+
+<TooltipCheckBox@ToolTip+CheckBox>
+    tooltip_bg_color: [192/256,110/256,240/256,1]
+<TooltipButton@ToolTip+Button>
+    tooltip_bg_color: [192/256,110/256,240/256,1]
+
+<DropDownItem@MDDropDownItem>:
+    Button:
+        text: 'first'
+        size_hint_y: None
+        height: 40
+        on_release: root.select('item1')
+
+
+
+<AddPopup@Popup>
+    auto_dismiss: False
+    title: 'Регистрация'
+    separator_color: (192/256,110/256,240/256,1)
+    size_hint:None,None
+    size:(400,550)
+#    background_color:'CC99FF'
+#    background_normal:''
+
+    BoxLayout:
+        # background color
+        canvas.before:
+            Color:
+                rgb: (1,1,1)
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+
+
+        orientation: "vertical"
+        adaptive_size: True
+
+        #spacing: "12dp"
+        #padding: "12dp"
+        #radius: [10, ]
+        #pos_hint: {"center_x": .5, "center_y": .5}
+        GridLayout:
+            cols:2
+            Label:
+                text: "[color=c06ef0]                                  Sing UP[/color]"
+                markup: True
+                font_size: 20
+                size_hint: None, None
+                height:50
+                width:50
+                pos_hint: {"center_x": .5}
+
+            Image:
+                source:'ilopet.jpg'
+#                center_x:self.parent.center_x
+#                center_y:self.parent.center_y
+                size:"20sp","20sp"
+        GridLayout:
+            cols:3
+            rows:1
+            size_hint_y:None
+            height:50
+            padding:75,0,10,0
+           # spacing:10
+        # имя пациента
+            MyField
+                id: pet_name_input
+                hint_text: 'Имя пациента'
+                on_text: root.set_pet_name(self.text)
+
+                pos_hint: {"center_x": .30}
+
+            Label:
+                id:click_label
+            Spinner:
+                id:spinner_id
+                text:"Вид"
+                values: root.get_values()
+                size_hint:None,None
+                size:(70,30)
+                on_text:root.set_pet_type(spinner_id.text)
+                background_color:"c06ef0"
+                background_normal:''
+
+
+        GridLayout:
+            cols:2
+            padding:75,0,0,0
+
+        # дата рождения
+            MyField:
+                id: birth_date_input
+                hint_text: 'Дата рождения'
+                helper_text: 'YYYY-MM-DD'
+                helper_text_mode: 'on_focus'
+                max_text_length: 10
+                on_text: root.set_birth_date(self.text)
+
+            #Button:
+            TooltipButton:
+                tooltip_text: 'календарь'
+                size_hint:None,None
+#            text:'Дата рождения'
+#            front_size:32
+                size: "40sp", "40sp"
+                on_press: root.choose_birth_date()
+                background_color:0,0,0,0
+
+                Image:
+                    source:'i.jpg'
+                    center_x:self.parent.center_x
+                    center_y:self.parent.center_y
+                    size:"40sp","40sp"
+
+            # дата последнего приёма
+            MyField:
+                id: last_appointment_date_input
+                hint_text: 'Дата последнего посещ-ия'
+                helper_text: 'YYYY-MM-DD'
+                helper_text_mode: 'on_focus'
+                max_text_length: 10
+                on_text: root.set_last_appointment_date(self.text)
+#                pos_hint: {"center_x": .5,"center_y":.5}
+
+            TooltipButton:
+#                text:'Дата последнего приёма'
+                tooltip_text: 'календарь'
+                size_hint: None, None
+                size: "40sp", "40sp"
+                on_press: root.choose_last_appointment_date()
+                background_color:0,0,0,0
+
+                Image:
+                    source:'i.jpg'
+                    center_x:self.parent.center_x
+                    center_y:self.parent.center_y
+                    size:"40sp","40sp"
+        GridLayout:
+            cols: 1
+            padding: 75,0,0,0
+            # имя врача
+            MyField:
+                hint_text: 'ФИО врача'
+                id: vet_name_input
+                on_text: root.set_vet_name(self.text)
+                multiline: False
+                pos_hint: {"center_x": .5,"center_y":.5}
+
+            # название болезни
+            MyField:
+                hint_text: 'Диагноз'
+                id: disease_input
+                on_text: root.set_disease(self.text)
+                multiline: False
+                pos_hint: {"center_x": .5,"center_y":.5}
+
+        GridLayout:
+            cols: 1
+            rows: 2
+            padding: 100, 0, 0, 0
+            spacing: 10
+            MDFillRoundFlatButton:
+                text: '  Добавить информацию  '
+                #disabled: True if root.everything() else False
+                on_press: root.record_patient_info()
+                #on_release: root.dialogs()
+                #on_press: root.info()
+                text_color: 0, 0, 0, 1
+                line_color: 0, 0, 0, 1
+    #            background_color: 'CCCCFF'
+    #            background_normal:''
+                pos_hint: {"center_x": .5,"center_y":.5}
+
+
+
+            MDFillRoundFlatButton:
+                text: 'Вернуться в главное меню'
+                #disabled: True if root.everything() else False
+                on_press: root.dismiss()
+                #on_press: root.info()
+                text_color: 0, 0, 0, 1
+                line_color: 1, 0, 1, 1
+                pos_hint: {"center_x": .5,"center_y":.5}
+
+
+<SearchPopup@Popup>
+    title: 'Поиск'
+    auto_dismiss:False
+    separator_color: (192/256,110/256,240/256,1)
+    background_color:'#a910e6'
+    size_hint:None,None
+    size:(400,500)
+
+    BoxLayout:
+        # background color
+        canvas.before:
+            Color:
+                rgb: (1,1,1)
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+
+
+        orientation: "vertical"
+        adaptive_size: True
+        GridLayout:
+            cols:2
+            Label:
+                text: "[color=c06ef0]                      Search[/color]"
+                markup: True
+                font_size: 20
+                size_hint: None, None
+                height:50
+                width:50
+                pos_hint: {"center_x": .5}
+
+            Image:
+                source:'ilopet.jpg'
+#                center_x:self.parent.center_x
+#                center_y:self.parent.center_y
+#                size:"5sp","5sp"
+                size: (5,5)
+
+        GridLayout:
+            cols: 2
+            rows: 2
+            padding:50,0,0,0
+            MyField:
+                id: pet_name_input
+                hint_text: 'Имя пациента'
+                on_text: root.set_search_pet_name(self.text)
+                pos_hint: {"center_x": .46}
+            #CheckBox:
+            TooltipCheckBox:
+                tooltip_text: 'по имени и\nдате рождения'
+                group: 'search'
+                color: '330000'
+                size_hint: None, None
+                height: 30
+                width: 200
+                on_active: root.set_properties(self, self.active, 'pet_name', 'birth_date')
+        GridLayout:
+            cols: 2
+            padding:50,0,0,0
+            spacing:20
+            #дата рождения
+            MyField:
+                id: birth_date_search
+                hint_text: 'Дата рождения'
+                helper_text: 'YYYY-MM-DD'
+                helper_text_mode: 'on_focus'
+                max_text_length: 10
+                on_text: root.set_search_birth_date(self.text)
+                multiline: False
+            TooltipButton:
+                tooltip_text: 'календарь'
+                size_hint: None, None
+                size: "40sp", "40sp"
+                on_press: root.choose_search_birth_date()
+                background_color:0,0,0,0
+                Image:
+                    source:'i.jpg'
+                    center_x:self.parent.center_x
+                    center_y:self.parent.center_y
+                    size:"40sp","40sp"
+
+        GridLayout:
+            cols: 2
+            padding:50,0,0,0
+            #имя врача
+            MyField:
+                hint_text: 'Имя врача'
+                id: vet_name
+                on_text: root.set_search_vet_name(self.text)
+                multiline: False
+            #CheckBox:
+            TooltipCheckBox:
+                tooltip_text: 'по ФИО врача и\nдате последнего посещения'
+                group: 'search'
+                color: '330000'
+                size_hint: None, None
+                height: 30
+                width: 200
+                on_active: root.set_properties(self, self.active, 'vet_name', 'last_appointment_date')
+        GridLayout:
+            cols: 2
+            padding: 50,0,0,0
+            spacing:20
+            MyField:
+                id: last_appointment_date_search
+                hint_text: 'Дата посленего посещ-ия'
+                helper_text: 'YYYY-MM-DD'
+                helper_text_mode: 'on_focus'
+                max_text_length: 10
+                on_text: root.set_search_last_appointment_date(self.text)
+                multiline: False
+            TooltipButton:
+                tooltip_text: 'календарь'
+                size_hint: None, None
+                size: "40sp", "40sp"
+                on_press: root.choose_search_last_appointment_date()
+                background_color:0,0,0,0
+                Image:
+                    source:'i.jpg'
+                    center_x:self.parent.center_x
+                    center_y:self.parent.center_y
+                    size:"40sp","40sp"
+
+        GridLayout:
+            cols: 2
+            padding: 50,0,0,0
+            MyField:
+                id: disease
+                hint_text: 'Диагноз'
+                on_text: root.set_search_disease_phrase(self.text)
+                multiline: False
+
+            #CheckBox:
+            TooltipCheckBox:
+                tooltip_text: 'по фразе из\nдиагноза'
+                group: 'search'
+                color: '330000'
+                size_hint: None, None
+                height: 30
+                width: 200
+                on_active: root.set_properties(self, self.active, 'disease', '')
+
+
+        GridLayout:
+            cols: 2
+            padding: 20, 0, 0, 0
+            spacing: 10
+            MDFillRoundFlatButton:
+                text: '          Поиск             '
+                #disabled: True if root.everything() else False
+                on_press: root.search()
+                #on_release: root.dialogs()
+                #on_press: root.info()
+                text_color: 0, 0, 0, 1
+                line_color: 0, 0, 0, 1
+    #            background_color: 'CCCCFF'
+    #            background_normal:''
+                pos_hint: {"center_x": .5,"center_y":.5}
+
+
+
+            MDFillRoundFlatButton:
+                text: 'Вернуться в главное меню'
+                #disabled: True if root.everything() else False
+                on_press: root.dismiss()
+                #on_press: root.info()
+                text_color: 0, 0, 0, 1
+                line_color: 1, 0, 1, 1
+                pos_hint: {"center_x": .5,"center_y":.5}
+
+
+<DeletePopup@Popup>
+    title: 'Удаление'
+    auto_dismiss:False
+    separator_color: (192/256,110/256,240/256,1)
+    background_color:'#a910e6'
+    size:(400,500)
+    size_hint:None,None
+
+    BoxLayout:
+        # background color
+        canvas.before:
+            Color:
+                rgb: (1,1,1)
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+
+
+        orientation: "vertical"
+        adaptive_size: True
+        GridLayout:
+            cols:2
+            Label:
+                text: "[color=c06ef0]                Delete[/color]"
+                markup: True
+                font_size: 20
+                size_hint: None, None
+                height:50
+                width:50
+                pos_hint: {"center_x": .5}
+
+            Image:
+                source:'ilopet.jpg'
+#                center_x:self.parent.center_x
+#                center_y:self.parent.center_y
+#                size:"5sp","5sp"
+                size: (5,5)
+
+
+        GridLayout:
+            cols: 2
+            rows: 2
+            padding: 50,0,0,0
+            MyField:
+                id: pet_name
+                hint_text: 'Имя пациента'
+                on_text: root.set_delete_pet_name(self.text)
+                multiline: False
+            TooltipCheckBox:
+                tooltip_text: 'по имени и\nдате рождения'
+                group: 'search'
+                color: '330000'
+                size_hint: None, None
+                height: 60
+                width: 200
+                on_active: root.set_properties(self, self.active, 'pet_name', 'birth_date')
+        GridLayout:
+            cols: 2
+            rows: 2
+            padding:50,0,0,0
+            spacing:20
+            MyField:
+                id: birth_date_delete
+                hint_text: 'Дата рождения'
+                helper_text: 'YYYY-MM-DD'
+                helper_text_mode: 'on_focus'
+                max_text_length: 10
+                on_text: root.set_delete_birth_date(self.text)
+                multiline: False
+            TooltipButton:
+                tooltip_text: 'календарь'
+                size_hint: None, None
+                size: "40sp", "40sp"
+                on_press: root.choose_delete_birth_date()
+                background_color:0,0,0,0
+
+                Image:
+                    source:'i.jpg'
+                    center_x:self.parent.center_x
+                    center_y:self.parent.center_y
+                    size:"40sp","40sp"
+
+
+        GridLayout:
+            cols: 2
+            padding:50,0,0,0
+
+            MyField:
+                id: vet_name
+                hint_text: 'Имя врача'
+                on_text: root.set_delete_vet_name(self.text)
+                multiline: False
+            TooltipCheckBox:
+                tooltip_text: 'по ФИО врача и\nдате последнего посещения'
+                group: 'search'
+                color: '330000'
+                size_hint: None, None
+                height: 60
+                width: 200
+                on_active: root.set_properties(self, self.active, 'vet_name', 'last_appointment_date')
+        GridLayout:
+            cols: 2
+            padding: 50,0,0,0
+            spacing: 20
+            MyField:
+                id: last_appointment_date_delete
+                hint_text: 'Дата последнего посещ-ия'
+                helper_text: 'YYYY-MM-DD'
+                helper_text_mode: 'on_focus'
+                max_text_length: 10
+                on_text: root.set_delete_last_appointment_date(self.text)
+                multiline: False
+            TooltipButton:
+                tooltip_text: 'календарь'
+                size_hint: None, None
+                size: "40sp", "40sp"
+                on_press: root.choose_delete_last_appointment_date()
+                background_color:0,0,0,0
+
+                Image:
+                    source:'i.jpg'
+                    center_x:self.parent.center_x
+                    center_y:self.parent.center_y
+                    size:"40sp","40sp"
+
+        GridLayout:
+            cols: 2
+            padding: 50,0,0,0
+            MyField:
+                id: disease
+                hint_text: 'Диагноз'
+                on_text: root.set_delete_disease_phrase(self.text)
+                multiline: False
+
+            TooltipCheckBox:
+                tooltip_text: 'по фразе из\nдиагноза'
+                group: 'search'
+                color: '330000'
+                size_hint: None, None
+                height: 60
+                width: 200
+                on_active: root.set_properties(self, self.active, 'disease', '')
+
+
+        GridLayout:
+            cols: 2
+            padding: 20, 0, 0, 0
+            spacing: 10
+            MDFillRoundFlatButton:
+                text: '        Удаление        '
+                on_press: root.delete()
+                #on_release: Factory.EmailLetter().open()
+                text_color: 0, 0, 0, 1
+                line_color: 0, 0, 0, 1
+                pos_hint: {"center_x": .5,"center_y":.5}
+
+
+
+            MDFillRoundFlatButton:
+                text: 'Вернуться в главное меню'
+                on_press: root.dismiss()
+                text_color: 0, 0, 0, 1
+                line_color: 1, 0, 1, 1
+                pos_hint: {"center_x": .5,"center_y":.5}
+
+
+
+<FoundPopup@Popup>
+    title: 'Удаление'
+    auto_dismiss:False
+    separator_color: (192/256,110/256,240/256,1)
+    background_color:'#a910e6'
+    size:(700,900)
+    size_hint:None,None
+
+
+
+<HandlerPopup@Popup>
+    title: 'Информация о хозяине'
+    auto_dismiss:False
+    separator_color: (192/256,110/256,240/256,1)
+    background_color:'#a910e6'
+    size_hint:None,None
+    size:(350,450)
+
+    BoxLayout:
+        # background color
+        canvas.before:
+            Color:
+                rgb: (1,1,1)
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+
+
+        orientation: "vertical"
+        adaptive_size: True
+
+        GridLayout:
+            cols:2
+            size_hint_y: .5
+            Label:
+                text: "[color=c06ef0]      Contacts[/color]"
+                markup: True
+                font_size: 20
+
+            Image:
+                source:'call.png'
+#                center_x:self.parent.center_x
+#                center_y:self.parent.center_y
+#                size:"5sp","5sp"
+                size: (5,5)
+        GridLayout:
+            cols:1
+            rows:4
+            padding:65,10,0,0
+            # имя пациента
+            MyField
+                id: hadler_name_input
+                hint_text: 'ФИО хозяина'
+                on_text: root.set_handler_name(self.text)
+                pos_hint: {"center_x": .46}
+
+        # Номер телефона
+            MyField:
+                id: phone_number_input
+                hint_text: 'Номера телефона'
+                helper_text: '+375-XX-XXX-XX-XX'
+                helper_text_mode: 'on_focus'
+                max_text_length: 17
+                on_text: root.set_phone_number(self.text)
+
+            #Почта
+            MyField:
+                id: email_input
+                hint_text: 'Электронная почта'
+                helper_text:'XXXXXXXXXXX@XXXXXX'
+                helper_text_mode: 'on_focus'
+                #max_text_length: 10
+                on_text: root.set_mail(self.text)
+
+            #Адрес
+            MyField:
+                hint_text: 'Адрес проживания'
+                id: address_input
+                on_text: root.set_address(self.text)
+                multiline: False
+#                pos_hint: {"center_x": .5,"center_y":.5}
+        GridLayout:
+            cols:2
+            rows:1
+            padding:25,100,0,0
+            spacing:10
+            MDFillRoundFlatButton:
+                text: 'Добавить информацию'
+                on_press: root.record_handler_info()
+                #on_release: root.dismiss()
+                text_color: 0, 0, 0, 1
+                line_color: 1, 0, 1, 1
+#                pos_hint: {"center_x": .5,"center_y":.5}
+            MDFillRoundFlatButton:
+                text: 'Назад'
+                on_press: root.dismiss()
+                #on_release: root.dismiss()
+                text_color: 0, 0, 0, 1
+                line_color: 1, 0, 1, 1
+#                pos_hint: {"center_x": .5,"center_y":.5}
+
+
+
+
+<InformationPopup@Popup>
+    title:'Информация о пациенте'
+    auto_dismiss:False
+    separator_color: (192/256,110/256,240/256,1)
+    background_color:'#a910e6'
+    size:(500,400)
+    size_hint:None,None
+
+    BoxLayout:
+        # background color
+        canvas.before:
+            Color:
+                rgb: (1,1,1)
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+
+
+        orientation: "vertical"
+        adaptive_size: True
+
+        Label:
+            text: "[color=c06ef0]Information[/color]"
+            markup: True
+            font_size: 20
+            size_hint_y:None
+            height:30
+            spacing:20
+
+
+        GridLayout:
+            cols:2
+            rows:8
+            spacing: 20
+            padding:0,10,0,0
+            size_hint_y: None
+            height:260
+            Label:
+                text:"[color=c06ef0]Имя пациента:[/color]"
+                markup: True
+                font_size: 15
+#                size_hint_y:None
+                height:30
+                width:30
+
+            Label:
+                color: '070606'
+                id:pet_name
+                markup: True
+                font_size: 15
+                height:20
+                width:30
+
+            Label:
+                text:"[color=c06ef0]Вид:[/color]"
+                markup: True
+                font_size: 15
+                height:20
+                width:30
+            Label:
+                color: '070606'
+                id: pet_type
+                markup: True
+                font_size: 15
+                height:30
+                width:30
+
+            Label:
+                text:"[color=c06ef0]Диагноз:[/color]"
+                markup: True
+                font_size: 15
+                height:30
+                width:30
+
+            Label:
+                color: '070606'
+                id: disease
+                markup: True
+                font_size: 15
+                height:30
+                width:30
+            Label:
+                text:"[color=c06ef0]Хозяин:[/color]"
+                markup: True
+                font_size: 15
+                height:30
+                width:30
+            Label:
+                color: '070606'
+                id: handler_name
+                markup: True
+                font_size: 15
+                height:30
+                width:30
+            Label:
+                text:"[color=c06ef0]Номер телефона:[/color]"
+                markup: True
+                font_size: 15
+                height:30
+                size_hint_y: None
+                width:30
+            Label:
+                color: '070606'
+                id: phone_number
+                markup: True
+                font_size: 15
+                height:30
+                width:30
+            Label:
+                text:"[color=c06ef0]Электронная почта:[/color]"
+                markup: True
+                font_size: 15
+                height:30
+                width:30
+            Label:
+                color: '070606'
+                id: mail
+                markup: True
+                font_size: 15
+#                size_hint_y:None
+                height:20
+                width:30
+            Label:
+                text:"[color=c06ef0]Адрес:[/color]"
+                markup: True
+                font_size: 15
+                height: 20
+#                size_hint_y:None
+                size_hint_y: None
+                width:20
+
+            Label:
+                color: '070606'
+                id: handler_address
+                markup: True
+                font_size: 15
+#                size_hint_y:None
+                height:20
+                width:30
+
+
+
+        GridLayout:
+            cols:1
+            padding:80,0,0,0
+            size_hint_y: None
+            height:50
+#            canvas.before:
+#                Color:
+#                    rgb: (1,0,1)
+#                Rectangle:
+#                    pos: self.pos
+#                    size: self.size
+            MDFillRoundFlatButton:
+                text: 'Вернуться в главное меню'
+                #disabled: True if root.everything() else False
+                on_press: root.close_pet_info_window()
+                #on_release: Factory.FoundPopup().open()
+                #on_press: root.info()
+                text_color: 0, 0, 0, 1
+                line_color: 1, 0, 1, 1
+    #            pos_hint: {"center_x": .5,"center_y":.5}
+
+
+<WarningPopup@Popup>
+    title: 'XML Parsing Error'
+    auto_dismiss:False
+    separator_color: (192/256,110/256,240/256,1)
+    background_color:'#a910e6'
+    size_hint:None,None
+    size:(350,450)
+    pos_hint: {"center_x": .5,"center_y":.5}
+
+    BoxLayout:
+        # background color
+#        canvas.before:
+#            Color:
+#                rgb: (1,1,1)
+#            Rectangle:
+#                pos: self.pos
+#                size: self.size
+
+
+
+        orientation: "vertical"
+        adaptive_size: True
+
+        Label:
+            text: 'Something went wrong'
+        GridLayout:
+            cols:2
+            Label:
+                text: 'Amount:'
+            Label:
+                id: files_count
+        GridLayout:
+            cols:2
+            Label:
+                text: 'Name:'
+            Label:
+                id: line_name
+        GridLayout:
+            cols:2
+            Label:
+                text: 'Count:'
+            Label:
+                id: line_count
+
+        Button:
+            text: 'do you want to fix them?'
+            on_press: root.dismiss()
+
+
+
+
+
+
+<MyLabel@Label>
+    pos_hint: {"center_y": .5}
+
+
+<EmailLetterPopup@Popup>
+    title:'Электронное письмо'
+    separator_color: (192/256,110/256,240/256,1)
+    background_color:'#a910e6'
+    size:(500,600)
+    size_hint:None,None
+
+    BoxLayout:
+        orientation: 'vertical'
+        canvas.before:
+            Color:
+                rgb: (1,1,1)
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Label:
+            text: 'mail'
+            color: 'c06ef0'
+        Label:
+            id: deleted_item_mail
+            color: 'c06ef0'
+
+
+        Button:
+            text: 'Вернуться в главное меню'
+            on_release: root.open_mail()
+            on_press: root.dismiss()
+            text_color: 0, 0, 0, 1
+            line_color: 1, 0, 1, 1
+            pos_hint: {"center_x": .5,"center_y":.5}
+
+
+<HelperPopup@Popup>
+    title: 'Contacts:'
+    separator_color: (192/256,110/256,240/256,1)
+    background_color:'#c06ef0'
+    size_hint:None,None
+    size:(400,370)
+
+    BoxLayout:
+        canvas.before:
+            Color:
+                rgb: (1,1,1)
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+
+
+        orientation: "vertical"
+        adaptive_size: True
+        Label:
+            text: "[color=c06ef0]   Contacts:[/color]"
+            markup: True
+            font_size: 20
+            size_hint_y:None
+            height:30
+            spacing:20
+
+        GridLayout:
+            cols:2
+            rows:5
+            spacing: 20
+            padding:0,0,10,0
+            size_hint_y: None
+            height:270
+            Label:
+                text: "[color=c06ef0]Наши контакты:[/color]"
+                markup: True
+                font_size: 15
+                size_hint_y: None
+                height:30
+                width:30
+            Label:
+                text:" "
+                markup: True
+                font_size: 15
+                size_hint_y: None
+                height:30
+                width:30
+
+            Label:
+                text:"[color=c06ef0]A1:[/color]"
+                markup: True
+                font_size: 15
+                size_hint_y: None
+                height:30
+                width:30
+            Label:
+                text: '+375-44-460-59-26'
+                color:'070606'
+                markup: True
+                font_size: 15
+                size_hint_y: None
+                height:30
+                width:30
+            Label:
+                text: '[color=c06ef0]Life:[/color]'
+                markup: True
+                font_size: 15
+                size_hint_y: None
+                height:30
+                width:30
+            Label:
+                text: '+375-25-503-82-11'
+                color:'070606'
+                markup: True
+                font_size: 15
+                size_hint_y: None
+                height:30
+                width:30
+            Label:
+                text:"[color=c06ef0]Адрес электронной\n           почты:[/color]"
+                markup: True
+                font_size: 15
+                size_hint_y: None
+                height:30
+                width:30
+            Label:
+                text: 'rabushka2014@mail.ru'
+                color:'070606'
+                markup: True
+                font_size: 15
+                size_hint_y: None
+                height:30
+                width:30
+            Label:
+                text:"[color=c06ef0]Мы в Минске:[/color]"
+                markup: True
+                font_size: 15
+                size_hint_y: None
+                height:30
+                width:30
+            Label:
+                text: 'ул.Якуба Колоса 28\n ул.Леонида Беды 4/1'
+                color:'070606'
+                markup: True
+                font_size: 15
+                size_hint_y: None
+                height:30
+                width:30
+
+
+
+<MainScreen>
+    BoxLayout:
+        orientation: "vertical"
+        adaptive_size: True
+
+        MDToolbar:
+            title: 'Menu'
+            height:40
+            size_hint_y:None
+            md_bg_color: 192/256,110/256,240/256,1
+            #left_action_items: [["menu",lambda x: x]]
+            TooltipButton:
+                tooltip_text: 'новая запись'
+                size_hint: None, None
+                size: "40sp", "40sp"
+                on_press: Factory.AddPopup(root.return_controller(), root.return_model()).open()
+                background_color:0,0,0,0
+                Image:
+                    source:'credit-card-plus.png'
+                    center_x:self.parent.center_x
+                    center_y:self.parent.center_y
+                    size:"40sp","40sp"
+
+            TooltipButton:
+                tooltip_text: 'поиск'
+                size_hint: None, None
+                size: "40sp", "40sp"
+                on_press: Factory.SearchPopup(root.return_controller(), root.return_model()).open()
+                background_color:0,0,0,0
+                Image:
+                    source:'credit-card-search-outline.png'
+                    center_x:self.parent.center_x
+                    center_y:self.parent.center_y
+                    size:"40sp","40sp"
+
+            TooltipButton:
+                tooltip_text: 'удалить запись'
+                size_hint: None, None
+                size: "40sp", "40sp"
+                on_press: Factory.DeletePopup(root.return_controller(), root.return_model()).open()
+                background_color:0,0,0,0
+                Image:
+                    source:'credit-card-remove-outline.png'
+                    center_x:self.parent.center_x
+                    center_y:self.parent.center_y
+                    size:"40sp","40sp"
+
+            TooltipButton:
+                tooltip_text: 'контактная\nинформация'
+                size_hint: None, None
+                size: "40sp", "40sp"
+                on_press: Factory.HelperPopup().open()
+                background_color:0,0,0,0
+                Image:
+                    source:'help-circle-outline.png'
+                    center_x:self.parent.center_x
+                    center_y:self.parent.center_y
+                    size:"40sp","40sp"
+
+        Label:
+#            text: "[color=FF00FF]ГЛАВНОЕ ОКНО[/color]"
+            markup: True
+            #font_size: "H6"
+            pos_hint: {"center_x": .5}
+            #adaptive_size: True
+
+        GridLayout:
+            cols: 3
+            size_hint: 1, 0.3
+            spacing:10
+            padding:10,0,10,10
+            Button:
+                text: 'Запись пациента'
+                background_color:'#c06ef0'
+                background_normal:''
+                on_release: Factory.AddPopup(root.return_controller(), root.return_model()).open()
+            Button:
+                text: 'Поиск пациента'
+                background_color:'#c06ef0'
+                background_normal:''
+                on_release: Factory.SearchPopup(root.return_controller(), root.return_model()).open()
+            Button:
+                text: 'Удаление пациента'
+                background_color:'#c06ef0'
+                background_normal:''
+                on_release: Factory.DeletePopup(root.return_controller(), root.return_model()).open()
